@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Análise de UGC</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-body">
+  <main class="dashboard-shell">
+    <section class="dashboard-hero">
+      <div>
+        <p class="eyebrow">Webinar | UGC</p>
+        <h1>Dashboard de Resultados</h1>
+        <p class="dashboard-intro">Resumo automático das respostas submetidas pelos formandos.</p>
+      </div>
+      <div class="dashboard-actions">
+        <button id="refreshBtn" class="secondary-btn" type="button">Atualizar</button>
+        <button id="exportCSV" class="primary-btn" type="button">Exportar CSV</button>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card">
+        <span class="stat-label">Participantes</span>
+        <strong id="participantes">0</strong>
+        <small>Total de respostas registadas</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Média geral</span>
+        <strong id="media">0 / 6</strong>
+        <small>Pontuação média da turma</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Percentagem média</span>
+        <strong id="percentagem">0%</strong>
+        <small>Desempenho médio global</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">Melhor resultado</span>
+        <strong id="melhor">0 / 6</strong>
+        <small>Resultado mais alto obtido</small>
+      </article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel chart-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Distribuição das pontuações</h2>
+            <p>Quantos formandos ficaram em cada resultado.</p>
+          </div>
+        </div>
+        <canvas id="graficoPontuacoes" height="130"></canvas>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Resumo rápido</h2>
+            <p>Leitura simples para fechar a atividade.</p>
+          </div>
+        </div>
+        <div class="summary-list">
+          <div><span>Respostas completas</span><strong id="respostasCompletas">0</strong></div>
+          <div><span>Resultados iguais ou superiores a 4/6</span><strong id="bonsResultados">0</strong></div>
+          <div><span>Resultados máximos</span><strong id="resultadosMaximos">0</strong></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Registos</h2>
+          <p>Consulta rápida das participações recebidas.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="tabelaResultados">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Curso</th>
+              <th>Pontuação</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4">A carregar resultados...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p id="estadoDashboard" class="dashboard-status"></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
