@@ -1,6 +1,6 @@
 
-const SUPABASE_URL="COLOCAR_URL";
-const SUPABASE_KEY="COLOCAR_CHAVE";
+const SUPABASE_URL="https://yymbsueuqglzikfshenn.supabase.co";
+const SUPABASE_KEY="sb_publishable_1vd_-hZR6wqilx39E-W8BA_fx9THigQ";
 const client=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 async function carregar(){
