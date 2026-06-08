@@ -154,30 +154,50 @@ function startGame() {
 }
 
 function startMemoryCountdown() {
-  let count = MEMORY_SECONDS;
-  countdownEl.textContent = String(count);
+  countdownEl.textContent = '';
 
-  if (countdownOverlay && countdownBig) {
+  if (countdownOverlay) {
     countdownOverlay.classList.remove('hidden');
-    countdownBig.textContent = String(count);
+    countdownOverlay.innerHTML = `
+      <div class="intro-message">
+        <div class="intro-title">MEMORIZA E ORDENA<br>OS MÓDULOS</div>
+        <div class="intro-subtitle">Tens 8 segundos para memorizar a posição dos módulos.</div>
+      </div>
+    `;
   }
 
-  memoryId = setInterval(() => {
-    count -= 1;
-    const value = count > 0 ? String(count) : 'GO!';
-    countdownEl.textContent = count > 0 ? String(count) : 'Começar';
-    if (countdownBig) countdownBig.textContent = value;
+  setTimeout(() => {
+    let count = MEMORY_SECONDS;
 
-    if (count <= 0) {
-      clearInterval(memoryId);
-      memoryId = null;
-      setTimeout(() => {
-        countdownOverlay?.classList.add('hidden');
-        flipCardsDown();
-        setTimeout(beginPlayableRound, 420);
-      }, 450);
+    if (countdownOverlay) {
+      countdownOverlay.innerHTML = `
+        <div id="countdownBig" class="countdown-big">${MEMORY_SECONDS}</div>
+        <div class="countdown-text">Memoriza a estrutura</div>
+      `;
     }
-  }, 1000);
+
+    const countdownBigEl = () => document.getElementById('countdownBig');
+
+    memoryId = setInterval(() => {
+      count -= 1;
+      const value = count > 0 ? String(count) : 'GO!';
+      countdownEl.textContent = count > 0 ? String(count) : 'Começar';
+
+      const el = countdownBigEl();
+      if (el) el.textContent = value;
+
+      if (count <= 0) {
+        clearInterval(memoryId);
+        memoryId = null;
+
+        setTimeout(() => {
+          countdownOverlay?.classList.add('hidden');
+          flipCardsDown();
+          setTimeout(beginPlayableRound, 420);
+        }, 450);
+      }
+    }, 1000);
+  }, 2000);
 }
 
 function flipCardsDown() {
@@ -300,57 +320,57 @@ const concepts = [
 ];
 
 const quizQuestions = [
+  { q: 'O que significa VR?', correct: 'Realidade Virtual', wrong: ['Vídeo Rápido', 'Validação Remota', 'Versão Reduzida'] },
+  { q: 'O que significa AR?', correct: 'Realidade Aumentada', wrong: ['Análise de Redes', 'Arquivo Remoto', 'Acesso Rápido'] },
+  { q: 'O que é Realidade Mista?', correct: 'Combinação entre elementos reais e virtuais', wrong: ['Apenas vídeo em 2D', 'Um tipo de folha de cálculo', 'Um método de email marketing'] },
+  { q: 'Para que servem os controlos de VR?', correct: 'Para interagir em ambientes virtuais', wrong: ['Para enviar newsletters', 'Para editar fotografias', 'Para gerir pagamentos'] },
+  { q: 'O que é um projeto para VR?', correct: 'Uma experiência criada para Realidade Virtual', wrong: ['Um documento em PDF', 'Uma campanha de redes sociais', 'Uma folha de cálculo'] },
+  { q: 'Para que podem servir QR Codes em AR?', correct: 'Para aceder a conteúdos aumentados', wrong: ['Para calcular impostos', 'Para enviar emails automáticos', 'Para criar passwords'] },
+  { q: 'O que é otimização gráfica?', correct: 'Melhorar desempenho e qualidade visual', wrong: ['Apagar todos os gráficos', 'Trocar Unity por Excel', 'Criar apenas textos'] },
   { q: 'Quantos módulos tem a nova estrutura do curso?', correct: '7 módulos', wrong: ['5 módulos', '6 módulos', '8 módulos'] },
-  { q: 'O que foi reforçado na atualização do curso?', correct: 'Conteúdos novos e atualizados', wrong: ['Apenas conteúdos teóricos', 'Remoção das práticas', 'Substituição do Unity por Photoshop'] },
-  { q: 'Quantos casos práticos foram destacados na atualização?', correct: '7 casos práticos', wrong: ['3 casos práticos', '5 casos práticos', '10 casos práticos'] },
-  { q: 'Que elemento final foi incluído para consolidar aprendizagens?', correct: '1 projeto final', wrong: ['1 exame oral', '1 plano editorial', '1 relatório financeiro'] },
-  { q: 'Quantas práticas foram destacadas na nova estrutura?', correct: '7 práticas', wrong: ['4 práticas', '5 práticas', '9 práticas'] },
+  { q: 'Quantos casos práticos fazem parte da estrutura?', correct: '7 casos práticos', wrong: ['3 casos práticos', '5 casos práticos', '10 casos práticos'] },
+  { q: 'Quantas práticas foram destacadas?', correct: '7 práticas', wrong: ['4 práticas', '5 práticas', '9 práticas'] },
   { q: 'Quantas horas de sessões práticas foram destacadas?', correct: '7,5 horas', wrong: ['3 horas', '5 horas', '12 horas'] },
-  { q: 'Qual destes temas faz parte dos conteúdos novos?', correct: 'Introdução à Realidade Mista', wrong: ['Introdução ao Excel', 'Introdução ao Photoshop', 'Introdução ao Email Marketing'] },
-  { q: 'Que tipo de controlos foi acrescentado aos conteúdos?', correct: 'Controlos para VR', wrong: ['Controlos para newsletters', 'Controlos para folhas de cálculo', 'Controlos para CRM comercial'] },
-  { q: 'Que tipo de projeto é trabalhado nos novos conteúdos?', correct: 'Projeto para VR', wrong: ['Projeto de e-commerce', 'Projeto de copywriting', 'Projeto de contabilidade'] },
-  { q: 'Que recurso é referido na componente de AR?', correct: 'Leitura de QR Codes', wrong: ['Criação de hashtags', 'Gestão de anúncios', 'Edição de newsletters'] },
-  { q: 'Que área técnica foi reforçada para melhorar desempenho visual?', correct: 'Otimização de componentes gráficos', wrong: ['Automação de emails', 'Gestão documental', 'Pesquisa de palavras-chave'] },
-  { q: 'O que significa VR neste contexto?', correct: 'Realidade Virtual', wrong: ['Vendas Rápidas', 'Vídeo Responsivo', 'Validação Remota'] },
-  { q: 'O que significa AR neste contexto?', correct: 'Realidade Aumentada', wrong: ['Análise de Redes', 'Automação de Relatórios', 'Arquivo Remoto'] },
-  { q: 'Qual destas opções está mais ligada a experiências imersivas?', correct: 'Realidade Mista', wrong: ['Folhas de cálculo', 'Email marketing', 'Gestão de redes sociais'] },
-  { q: 'Qual destas opções se relaciona com dispositivos imersivos?', correct: 'Controlos para VR', wrong: ['Segmentação de anúncios', 'Planeamento editorial', 'Gestão de leads'] },
-  { q: 'Qual é uma vantagem de estruturar o curso em módulos?', correct: 'Facilitar a compreensão do percurso formativo', wrong: ['Eliminar a prática', 'Reduzir a componente técnica', 'Remover o projeto final'] },
-  { q: 'Qual destas opções resume melhor a atualização?', correct: 'Mais estrutura, prática e conteúdos imersivos', wrong: ['Menos prática e mais teoria isolada', 'Apenas redes sociais', 'Apenas design gráfico'] },
-  { q: 'Que ferramenta central continua a orientar o curso?', correct: 'Unity', wrong: ['Excel', 'WordPress', 'Canva'] },
-  { q: 'Que linguagem está associada à programação no curso?', correct: 'C#', wrong: ['PHP', 'SQL', 'HTML apenas'] },
-  { q: 'Qual destas áreas faz sentido num curso de videojogos em Unity?', correct: 'Físicas e Comportamentos', wrong: ['Fiscalidade', 'Gestão de recursos humanos', 'Contabilidade'] },
-  { q: 'Qual destes temas está mais associado à experiência do utilizador no jogo?', correct: 'Interface', wrong: ['Arquivo documental', 'Faturação', 'Email institucional'] },
-  { q: 'Qual destes temas está ligado ao ambiente visual e sonoro?', correct: 'Gráficos e Som', wrong: ['Google Analytics', 'Gestão de cobranças', 'Atendimento telefónico'] },
-  { q: 'Qual destas opções está ligada à criação de interações no jogo?', correct: 'Controlo de Objetos', wrong: ['Gestão de campanhas', 'Processamento salarial', 'Planeamento de posts'] },
-  { q: 'Qual destes temas está ligado à base conceptual dos jogos?', correct: 'Teoria dos Videojogos', wrong: ['Marketing de moda', 'Gestão fiscal', 'Suporte administrativo'] },
-  { q: 'Qual destas opções descreve melhor um projeto final?', correct: 'Aplicação prática dos conteúdos aprendidos', wrong: ['Resumo sem componente prática', 'Exercício sem Unity', 'Texto comercial do curso'] },
-  { q: 'Porque é relevante incluir casos práticos?', correct: 'Ajudam a aplicar os conteúdos em situações concretas', wrong: ['Substituem todos os módulos', 'Eliminam a necessidade de prática', 'Servem apenas para avaliação comercial'] },
-  { q: 'O que se pretende com sessões práticas?', correct: 'Treinar competências técnicas com orientação', wrong: ['Ler apenas documentação', 'Evitar uso do Unity', 'Trocar videojogos por redes sociais'] },
-  { q: 'Que conteúdo aproxima o curso de experiências imersivas atuais?', correct: 'Realidade Mista', wrong: ['Email marketing', 'Excel financeiro', 'SEO local'] },
-  { q: 'A leitura de QR Codes está associada a que área?', correct: 'Realidade Aumentada', wrong: ['Email marketing', 'WordPress', 'Contabilidade'] },
-  { q: 'Qual destas opções é uma tecnologia imersiva?', correct: 'VR', wrong: ['CSV', 'PDF', 'SMTP'] },
-  { q: 'Qual destas opções está associada a objetos digitais sobre o mundo real?', correct: 'AR', wrong: ['TXT', 'CRM', 'SEO'] },
-  { q: 'Otimizar componentes gráficos ajuda sobretudo a melhorar o quê?', correct: 'Desempenho e qualidade visual', wrong: ['Gestão de emails', 'Taxas de IVA', 'Publicação em redes sociais'] },
-  { q: 'Qual destes conteúdos aponta para criação de experiências em óculos/dispositivos imersivos?', correct: 'Projeto para VR', wrong: ['Plano de comunicação', 'Newsletter comercial', 'Relatório de vendas'] },
-  { q: 'O que torna a atualização mais fácil de apresentar aos candidatos?', correct: 'Estrutura clara e organizada', wrong: ['Menos informação sobre práticas', 'Ausência de projeto final', 'Fim dos conteúdos técnicos'] },
-  { q: 'Que frase descreve melhor a nova organização?', correct: 'Curso organizado em 7 módulos', wrong: ['Curso sem módulos', 'Curso apenas introdutório', 'Curso sem componente prática'] },
-  { q: 'Que componente reforça a ligação entre teoria e execução?', correct: 'Casos práticos', wrong: ['Apenas leitura', 'Apenas teste final', 'Apenas apresentação comercial'] },
-  { q: 'Que componente reforça a consolidação no fim do percurso?', correct: 'Projeto final', wrong: ['Remoção de exercícios', 'Ficha de inscrição', 'Newsletter'] },
-  { q: 'Qual destas opções é conteúdo técnico de Unity?', correct: 'Otimização de componentes gráficos', wrong: ['Google Ads', 'Canva para redes sociais', 'Mailchimp'] },
-  { q: 'Qual destas opções está ligada ao desenvolvimento de videojogos?', correct: 'Programação C#', wrong: ['Gestão de perfis LinkedIn', 'Análise de concorrência', 'Plano de conteúdos'] },
-  { q: 'Qual destes elementos é importante para criar menus e ecrãs no jogo?', correct: 'Interface', wrong: ['IVA', 'Funil de vendas', 'Calendário editorial'] },
-  { q: 'Qual destas áreas está ligada a movimento, colisões e comportamentos?', correct: 'Físicas e Comportamentos', wrong: ['E-mail marketing', 'SEO técnico', 'Gestão de eventos'] },
-  { q: 'Qual destes temas ajuda a perceber o funcionamento e evolução dos jogos?', correct: 'Teoria dos Videojogos', wrong: ['Gestão financeira', 'Comunicação interna', 'Design editorial'] },
-  { q: 'Qual é o foco principal da atualização apresentada?', correct: 'Reforçar conteúdos, prática e estrutura', wrong: ['Reduzir o curso a teoria', 'Eliminar Unity', 'Trocar videojogos por multimédia geral'] },
-  { q: 'Que opção não pertence ao conjunto de novidades indicadas?', correct: 'Contabilidade avançada', wrong: ['Realidade Mista', 'Controlos para VR', 'Leitura de QR Codes para AR'] },
-  { q: 'Qual destes conteúdos ajuda a ligar físico e digital?', correct: 'Leitura de QR Codes para AR', wrong: ['Criação de emails', 'Gestão de folhas Excel', 'Publicação de stories'] },
-  { q: 'Que tipo de aprendizagem é reforçada com 7 práticas?', correct: 'Aprendizagem aplicada', wrong: ['Aprendizagem apenas passiva', 'Aprendizagem sem exercícios', 'Aprendizagem só teórica'] },
-  { q: 'Qual é a melhor forma de explicar a atualização a um assessor?', correct: 'Nova estrutura, novos conteúdos e mais prática', wrong: ['Menos conteúdos e menos prática', 'Apenas mudança de nome', 'Apenas alteração visual'] },
-  { q: 'Qual destas opções está mais associada à criação dentro do Unity?', correct: 'Controlo de objetos e comportamentos', wrong: ['Criação de campanhas Meta Ads', 'Gestão de newsletters', 'Tratamento de folhas de pagamento'] },
-  { q: 'Que conteúdo novo pode ser associado a experiências imersivas em ambientes virtuais?', correct: 'Criação de um projeto para VR', wrong: ['Criação de um blog', 'Criação de uma campanha de email', 'Criação de um plano de SEO'] },
-  { q: 'Que conteúdo novo pode ser associado a experiências sobrepostas ao mundo real?', correct: 'QR Codes para AR', wrong: ['Google Sheets', 'Photoshop básico', 'Gestão de contactos'] },
-  { q: 'Qual destas opções está alinhada com o relançamento do curso?', correct: 'Conteúdos reorganizados e atualizados', wrong: ['Curso sem projeto final', 'Curso sem sessões práticas', 'Curso sem Unity'] }
+  { q: 'O curso inclui um projeto final?', correct: 'Sim, inclui 1 projeto final', wrong: ['Não inclui projeto final', 'Inclui apenas um teste teórico', 'Inclui apenas uma ficha de leitura'] },
+  { q: 'Qual é a ferramenta central do curso?', correct: 'Unity', wrong: ['Excel', 'Canva', 'WordPress'] },
+  { q: 'Que linguagem está associada à programação no curso?', correct: 'C#', wrong: ['PHP', 'HTML apenas', 'SQL'] },
+  { q: 'Para que servem casos práticos?', correct: 'Para aplicar os conteúdos em situações concretas', wrong: ['Para substituir todos os módulos', 'Para eliminar a prática', 'Para decorar nomes de ferramentas'] },
+  { q: 'Para que servem sessões práticas?', correct: 'Para treinar competências técnicas', wrong: ['Para evitar usar o Unity', 'Para ler apenas teoria', 'Para fazer tarefas comerciais'] },
+  { q: 'Qual é o objetivo da estrutura por módulos?', correct: 'Organizar melhor o percurso formativo', wrong: ['Remover conteúdos práticos', 'Tornar o curso menos claro', 'Eliminar o projeto final'] },
+  { q: 'O que significa conteúdo atualizado?', correct: 'Conteúdo revisto e adaptado à nova estrutura', wrong: ['Conteúdo eliminado', 'Conteúdo sem prática', 'Conteúdo apenas administrativo'] },
+  { q: 'O que significa conteúdo novo?', correct: 'Conteúdo acrescentado ao curso', wrong: ['Conteúdo antigo sem alterações', 'Conteúdo removido', 'Conteúdo duplicado'] },
+  { q: 'Qual destes temas está ligado a experiências imersivas?', correct: 'Realidade Mista', wrong: ['Contabilidade', 'Email marketing', 'Faturação'] },
+  { q: 'Qual destes temas está ligado a Realidade Virtual?', correct: 'Controlos para VR', wrong: ['SEO local', 'Gestão de newsletters', 'Folhas de cálculo'] },
+  { q: 'Qual destes temas está ligado a Realidade Aumentada?', correct: 'Leitura de QR Codes para AR', wrong: ['Criação de faturas', 'Gestão de email', 'Calendário editorial'] },
+  { q: 'O que pode melhorar com a otimização gráfica?', correct: 'A fluidez e o desempenho visual', wrong: ['O preço do curso', 'A gestão de emails', 'A inscrição administrativa'] },
+  { q: 'O que é uma interface num jogo?', correct: 'A zona de interação visual com o utilizador', wrong: ['Um relatório financeiro', 'Um contrato de formação', 'Uma campanha de anúncios'] },
+  { q: 'O que são gráficos e som num jogo?', correct: 'Elementos visuais e áudio da experiência', wrong: ['Dados de faturação', 'Textos administrativos', 'Emails automáticos'] },
+  { q: 'O que é controlo de objetos?', correct: 'Movimentação e interação com elementos do jogo', wrong: ['Gestão de centros formativos', 'Criação de contratos', 'Agendamento comercial'] },
+  { q: 'O que são físicas num jogo?', correct: 'Regras de movimento, colisão e comportamento', wrong: ['Regras de faturação', 'Regras de email', 'Regras de SEO'] },
+  { q: 'O que é teoria dos videojogos?', correct: 'Base conceptual sobre jogos e funcionamento', wrong: ['Gestão de salários', 'Marketing de moda', 'Arquivo documental'] },
+  { q: 'O que é Programação C# no contexto do curso?', correct: 'Criação de lógica e comportamentos no Unity', wrong: ['Edição de fotografias', 'Gestão de campanhas', 'Criação de newsletters'] },
+  { q: 'O que é Introdução ao Unity?', correct: 'Primeiro contacto com o ambiente e ferramentas Unity', wrong: ['Introdução ao Excel', 'Introdução a redes sociais', 'Introdução a faturação'] },
+  { q: 'Porque é importante haver um projeto final?', correct: 'Para consolidar aprendizagens', wrong: ['Para evitar exercícios', 'Para substituir todos os módulos', 'Para retirar a componente técnica'] },
+  { q: 'Porque é importante haver práticas?', correct: 'Para transformar teoria em aplicação', wrong: ['Para evitar contacto com ferramentas', 'Para reduzir aprendizagem', 'Para eliminar exercícios'] },
+  { q: 'O que torna a atualização mais fácil de comunicar?', correct: 'Estrutura clara, conteúdos novos e mais prática', wrong: ['Menos informação e menos prática', 'Apenas mudança visual', 'Remoção dos conteúdos técnicos'] },
+  { q: 'Qual é uma vantagem de falar em 7 módulos?', correct: 'Facilita explicar a organização do curso', wrong: ['Confunde a estrutura', 'Elimina a progressão', 'Substitui o Unity'] },
+  { q: 'Qual é uma vantagem de destacar 7 casos práticos?', correct: 'Mostra aplicação real dos conteúdos', wrong: ['Mostra ausência de prática', 'Mostra que não há projeto final', 'Mostra que o curso é só teórico'] },
+  { q: 'Qual é uma vantagem de referir 7,5 horas de sessões práticas?', correct: 'Ajuda a reforçar a componente acompanhada', wrong: ['Retira valor à prática', 'Elimina o acompanhamento', 'Substitui todos os conteúdos'] },
+  { q: 'Que conceito se associa a objetos digitais no mundo real?', correct: 'Realidade Aumentada', wrong: ['Realidade Virtual apenas', 'Email marketing', 'SEO técnico'] },
+  { q: 'Que conceito se associa a ambientes totalmente virtuais?', correct: 'Realidade Virtual', wrong: ['Realidade Aumentada apenas', 'Gestão documental', 'Marketing de moda'] },
+  { q: 'Que conceito pode misturar o real e o virtual?', correct: 'Realidade Mista', wrong: ['Folha de cálculo', 'Relatório comercial', 'Campanha de email'] },
+  { q: 'Qual destes conteúdos é novo ou reforçado?', correct: 'Criação de Projetos VR', wrong: ['Criação de newsletters', 'Gestão de anúncios Meta', 'Contabilidade avançada'] },
+  { q: 'Qual destes conteúdos é novo ou reforçado?', correct: 'Leitura de QR Codes para AR', wrong: ['Tratamento de salários', 'Google Analytics', 'Gestão de inbox'] },
+  { q: 'Qual destes conteúdos é novo ou reforçado?', correct: 'Otimização de Componentes Gráficos', wrong: ['Criação de posts no Canva', 'Gestão de CRM', 'Escrita de emails'] },
+  { q: 'Qual destes conteúdos é novo ou reforçado?', correct: 'Introdução à Realidade Mista', wrong: ['Introdução ao Word', 'Introdução ao Excel', 'Introdução ao Photoshop'] },
+  { q: 'Qual destes conteúdos é novo ou reforçado?', correct: 'Controlos para VR', wrong: ['Controlos de orçamento', 'Controlos de email', 'Controlos de redes sociais'] },
+  { q: 'Qual destas opções resume melhor o relançamento?', correct: 'Mais organização, prática e conteúdos imersivos', wrong: ['Menos prática e menos clareza', 'Apenas alteração de nome', 'Fim da componente técnica'] },
+  { q: 'O que deve um assessor reter sobre a atualização?', correct: 'Há nova estrutura e conteúdos reforçados', wrong: ['O curso deixou de usar Unity', 'O curso perdeu a prática', 'O curso não tem projeto final'] },
+  { q: 'Qual é a melhor forma de explicar VR a um candidato?', correct: 'Experiências em ambientes virtuais', wrong: ['Vídeos para redes sociais', 'Validação de documentos', 'Vendas por telefone'] },
+  { q: 'Qual é a melhor forma de explicar AR a um candidato?', correct: 'Conteúdos digitais sobre o mundo real', wrong: ['Relatórios automáticos', 'Emails em massa', 'Folhas de cálculo'] },
+  { q: 'Qual é a melhor forma de explicar Realidade Mista?', correct: 'Integração entre real e virtual', wrong: ['Uma tabela de avaliação', 'Um formulário comercial', 'Um plano financeiro'] },
+  { q: 'Qual destes pontos reforça a componente prática do curso?', correct: '7 práticas e 7 casos práticos', wrong: ['Apenas teoria', 'Sem exercícios', 'Sem projeto final'] },
+  { q: 'Qual destes pontos reforça a conclusão do percurso?', correct: '1 projeto final', wrong: ['Um email automático', 'Uma campanha paga', 'Uma ficha administrativa'] }
 ];
 
 function showConcepts() {
@@ -362,8 +382,6 @@ function showConcepts() {
         <h1 class="concept-title" id="conceptTitle"></h1>
         <p class="concept-hint">Toca para avançar</p>
       <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
-<button id="toggleRankingBtn" class="ghost-btn">${showFullRanking ? 'Ver Top 10' : 'Ver Ranking Completo'}</button>
-<button id="playAgainBtn" class="primary-btn">Voltar a Jogar</button>
 </div>
 </section>
     </main>

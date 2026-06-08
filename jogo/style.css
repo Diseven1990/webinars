@@ -1557,3 +1557,57 @@ h1 span,
     display: none;
   }
 }
+
+/* Mensagem inicial da fase de memorização */
+.countdown-overlay.message-mode {
+  background:
+    radial-gradient(circle at 25% 20%, rgba(37, 99, 235, .26), transparent 34%),
+    radial-gradient(circle at 78% 82%, rgba(249, 115, 22, .22), transparent 34%),
+    rgba(0, 0, 0, .84);
+}
+.countdown-overlay.message-mode .countdown-big {
+  width: min(88vw, 560px);
+  font-size: clamp(2.45rem, 11.5vw, 5.3rem);
+  line-height: .96;
+  letter-spacing: -.055em;
+  text-align: center;
+  text-transform: uppercase;
+  animation: conceptIn .38s ease-out both;
+}
+.countdown-overlay.message-mode .countdown-text {
+  width: min(82vw, 420px);
+  margin-top: 20px;
+  opacity: .86;
+  font-size: clamp(.86rem, 3.7vw, 1.05rem);
+  line-height: 1.32;
+  letter-spacing: .04em;
+  text-transform: none;
+}
+
+
+.intro-message{
+ position:absolute;
+ inset:0;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ padding:24px;
+ background:#0b0d14;
+}
+
+.intro-title{
+ font-size:clamp(2rem,8vw,3.4rem);
+ font-weight:900;
+ line-height:1.1;
+ color:#fff;
+ text-transform:uppercase;
+}
+
+.intro-subtitle{
+ margin-top:18px;
+ font-size:clamp(1rem,4vw,1.25rem);
+ color:#d8d8d8;
+ max-width:320px;
+}
